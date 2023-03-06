@@ -24,7 +24,6 @@ HELP_COMMAND = """
 arr_images = glob('images/*')
 
 
-
 async def on_startup(_):  # сообщеение в терминале о запуске бота
     print('Бот был успешно запущен')
 
@@ -60,7 +59,7 @@ async def rendom_photo_command(message: types.Message):
                          photo=photo,
                          caption='Вот ваше фото!!!',
                          reply_markup=kb)
-    
+
     await message.delete()
 
 
