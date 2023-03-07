@@ -6,7 +6,9 @@ ib1 = InlineKeyboardButton(text='❤️ ',
                            callback_data="like",)
 ib2 = InlineKeyboardButton(text='👎 ',
                            callback_data="dislike")
-ikb.add(ib1).insert(ib2)
+ib3 = InlineKeyboardButton(text='Следующее фото',
+                           callback_data="next",)
+ikb.add(ib1,ib2).add(ib3)
 
 
 kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
