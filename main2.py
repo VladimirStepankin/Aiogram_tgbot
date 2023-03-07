@@ -21,7 +21,13 @@ HELP_COMMAND = """
 /give
 """
 
-arr_images = glob('images/*')
+arr_images = glob('images/*')  # список из картинок из папки
+
+dict_img = dict(zip(arr_images, [1, 2, 3, 4, 5]))  # словарь для описаний картинок
+random_photo = random.choice(list(dict_img.keys()))
+
+
+
 
 
 async def on_startup(_):  # сообщеение в терминале о запуске бота
@@ -44,31 +50,41 @@ async def help_command(message: types.Message):
 
 @dp.message_handler(commands=['vote'])
 async def vote_command(message: types.Message):
-    photo = open(random.choice(arr_images), 'rb')
+    random_photo = random.choice(list(dict_img.keys()))
+    # photo = open(random.choice(arr_images), 'rb')
     await bot.send_photo(chat_id=message.chat.id,
-                         photo=photo,
-                         caption='Как фото?',
+                         photo=open(random_photo, 'rb'),
+                         caption=dict_img[random_photo],
                          reply_markup=ikb)
     await message.delete()
 
 
 @dp.message_handler(Text(equals='Рандомное фото'))
 async def rendom_photo_command(message: types.Message):
-    photo = open(random.choice(arr_images), 'rb')
+    random_photo = random.choice(list(dict_img.keys()))
+    photo = open(random_photo, 'rb')
     await bot.send_photo(chat_id=message.chat.id,
-                         photo=photo,
-                         caption='Вот ваше фото!!!',
-                         reply_markup=kb)
-
+                        photo=photo,  
+                        caption=dict_img[random_photo],  # привязка подписи к картинке
+                        reply_markup=ikb)
     await message.delete()
 
 
 @dp.callback_query_handler()
 async def vote_callback(callback: types.CallbackQuery):
+    global random_photo
     if callback.data == 'like':
         await callback.answer(text='Огонь!!!')
-    await callback.answer(text='Жаль(')
-
-
+    elif callback.data == 'dislike':
+        await callback.answer(text='Жаль(')
+    else:
+        #await rendom_photo_command(message=callback.message)
+        random_photo = random.choice(list(filter(lambda x: x != random_photo, list(dict_img.keys()))))
+        photo = open(random_photo, 'rb')
+        await callback.message.edit_media(types.InputMedia(media=photo,
+                                                           type='photo',
+                                                           caption=dict_img[random_photo]),
+                                        reply_markup=ikb)
+        await callback.answer()
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
