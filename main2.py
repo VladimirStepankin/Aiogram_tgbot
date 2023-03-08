@@ -1,12 +1,11 @@
-# Inline клавиатура
+
 from aiogram import Bot, executor, Dispatcher, types
 from aiogram.dispatcher.filters import Text
 from aiogram.types import InputFile, Message
 from keybords import kb, ikb
 import random
 from glob import glob
-import os
-from PIL import Image
+
 
 from Config import TOKEN_API
 
@@ -20,9 +19,8 @@ HELP_COMMAND = """
 /description
 /give
 """
-
+flag = False
 arr_images = glob('images/*')  # список из картинок из папки
-
 dict_img = dict(zip(arr_images, [1, 2, 3, 4, 5]))  # словарь для описаний картинок
 random_photo = random.choice(list(dict_img.keys()))
 
@@ -73,10 +71,20 @@ async def rendom_photo_command(message: types.Message):
 @dp.callback_query_handler()
 async def vote_callback(callback: types.CallbackQuery):
     global random_photo
+    global flag
     if callback.data == 'like':
-        await callback.answer(text='Огонь!!!')
+        if not flag:
+            await callback.answer(text='Огонь!!!')
+            flag = not flag
+        else:
+            await callback.answer(text='Вы уже лайкали')
     elif callback.data == 'dislike':
         await callback.answer(text='Жаль(')
+    elif callback.data == 'main_menu':
+        await callback.message.answer(text='Добро пожаловать в главное меню',
+                                      reply_markup=kb)
+        await callback.message.delete()
+        await callback.answer()
     else:
         #await rendom_photo_command(message=callback.message)
         random_photo = random.choice(list(filter(lambda x: x != random_photo, list(dict_img.keys()))))
@@ -86,5 +94,8 @@ async def vote_callback(callback: types.CallbackQuery):
                                                            caption=dict_img[random_photo]),
                                         reply_markup=ikb)
         await callback.answer()
+
+
+
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
