@@ -8,7 +8,9 @@ ib2 = InlineKeyboardButton(text='👎 ',
                            callback_data="dislike")
 ib3 = InlineKeyboardButton(text='Следующее фото',
                            callback_data="next",)
-ikb.add(ib1,ib2).add(ib3)
+ib4 = InlineKeyboardButton(text='Главное меню',
+                           callback_data="main_menu",)
+ikb.add(ib1,ib2).add(ib3).add(ib4)
 
 
 kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
