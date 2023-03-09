@@ -79,7 +79,7 @@ async def vote_callback(callback: types.CallbackQuery):
         else:
             await callback.answer(text='Вы уже лайкали')
     elif callback.data == 'dislike':
-        await callback.answer(text='Жаль(')
+        await callback.answer(text='Жаль(') #swow_alert() - для вывода текста в отдельном окне
     elif callback.data == 'main_menu':
         await callback.message.answer(text='Добро пожаловать в главное меню',
                                       reply_markup=kb)
