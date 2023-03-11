@@ -18,3 +18,11 @@ b1 = KeyboardButton(text='/vote')
 b2 = KeyboardButton(text='/help')
 b3 = KeyboardButton(text='Рандомное фото')
 kb.add(b1, b2).add(b3)
+
+
+def get_inline_keybord():
+    ikb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton('Increase', callback_data='btn_increase'),
+        InlineKeyboardButton('Decrease',callback_data='btn_decrease')],
+    ])
+    return ikb
