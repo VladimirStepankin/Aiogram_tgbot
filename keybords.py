@@ -1,4 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.utils.callback_data import CallbackData
+
+
+cb = CallbackData('inline_kb', 'action')
 
 
 ikb = InlineKeyboardMarkup(row_width=2)
@@ -19,6 +23,12 @@ b2 = KeyboardButton(text='/help')
 b3 = KeyboardButton(text='Рандомное фото')
 kb.add(b1, b2).add(b3)
 
+def inline_keybord():
+    inline_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton('Button_1', callback_data=cb.new('push_1'))],
+        [InlineKeyboardButton('Button_2', callback_data=cb.new('push_2'))],
+    ])
+    return inline_kb
 
 def get_inline_keybord():
     ikb = InlineKeyboardMarkup(inline_keyboard=[
